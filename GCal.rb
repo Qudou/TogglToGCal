@@ -3,6 +3,7 @@
 require 'yaml'
 require 'rubygems'
 require 'google/api_client'
+require 'time'
 
 
 class GCal
@@ -27,14 +28,14 @@ class GCal
     entrys.each do |entry|
       puts entry["description"]
       if entry["stop"] == nil
-        endtime = change_date_format_for_time(Time.now.to_s)
+        endtime = Time.now.iso8601
       else
-        endtime = change_date_format_for_time_entry(entry["stop"])
+        endtime = Time.parse(entry["stop"]).iso8601
       end
       event = {
         'summary' => entry["description"],
         'start' => {
-          'dateTime' => change_date_format_for_time_entry(entry["start"])
+          'dateTime' => Time.parse(entry["start"]).iso8601
         },
         'end' => {
           'dateTime' => endtime
